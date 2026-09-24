@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import VapiModal from "./VapiModal";
 
 /* ── Fixed bar heights — avoids hydration mismatch with Math.random ── */
 const WAVE_BARS = [8, 22, 14, 30, 10, 25, 17, 32, 11, 21, 8, 26];
@@ -564,8 +565,12 @@ function VisualPanel() {
 
 /* ── Hero section ── */
 export default function Hero() {
+  const [isVapiOpen, setIsVapiOpen] = useState(false);
+
   return (
-    <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-12 sm:pb-16 overflow-hidden">
+    <>
+      <VapiModal isOpen={isVapiOpen} onClose={() => setIsVapiOpen(false)} />
+      <section className="relative min-h-[100svh] flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-12 sm:pb-16 overflow-hidden">
 
       {/* ── Background ── */}
       <div
@@ -750,8 +755,9 @@ export default function Hero() {
                 </svg>
               </motion.a>
 
-              <motion.a
-                href="#como-funciona"
+              <motion.button
+                type="button"
+                onClick={() => setIsVapiOpen(true)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-medium text-sm transition-all duration-300 w-full sm:w-auto"
@@ -779,7 +785,7 @@ export default function Hero() {
                   <path d="M5.5 5.2l4 1.8-4 1.8V5.2z" fill="currentColor" />
                 </svg>
                 Escuchar una llamada real
-              </motion.a>
+              </motion.button>
             </div>
           </FadeUp>
         </div>
@@ -809,5 +815,6 @@ export default function Hero() {
         </motion.div>
       </motion.div>
     </section>
+    </>
   );
 }

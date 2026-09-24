@@ -2,6 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
+
+// Fuera de la home, los enlaces a secciones deben apuntar a la página principal.
+function useSectionHref() {
+  const onHome = usePathname() === "/";
+  return (href: string) =>
+    onHome || href === "#contacto" ? href : href === "#" ? "/" : `/${href}`;
+}
 
 const links = [
   { label: "Cómo funciona", href: "#como-funciona" },
@@ -11,8 +19,9 @@ const links = [
 ];
 
 function Logo() {
+  const sectionHref = useSectionHref();
   return (
-    <a href="#" className="group flex items-center gap-3">
+    <a href={sectionHref("#")} className="group flex items-center gap-3">
       {/* Symbol */}
       <div className="relative">
         <svg
@@ -97,6 +106,7 @@ function NavLink({ label, href }: { label: string; href: string }) {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const sectionHref = useSectionHref();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -124,7 +134,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-10">
           {links.map((link) => (
-            <NavLink key={link.href} label={link.label} href={link.href} />
+            <NavLink key={link.href} label={link.label} href={sectionHref(link.href)} />
           ))}
         </ul>
 
@@ -198,7 +208,7 @@ export default function Navbar() {
                   transition={{ delay: i * 0.06, ease: "easeOut" }}
                 >
                   <a
-                    href={link.href}
+                    href={sectionHref(link.href)}
                     onClick={() => setMenuOpen(false)}
                     className="text-[17px] font-semibold text-[#6b89a8] hover:text-[#0A5CFF] transition-colors"
                   >

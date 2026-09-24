@@ -1,6 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import CookieSettingsButton from "./CookieSettingsButton";
+
+const legalLinks = [
+  { label: "Aviso Legal", href: "/aviso-legal" },
+  { label: "Política de Privacidad", href: "/politica-de-privacidad" },
+  { label: "Política de Cookies", href: "/politica-de-cookies" },
+];
 
 const navLinks = [
   { label: "Cómo funciona", href: "#como-funciona" },
@@ -73,6 +81,12 @@ const socials = [
 ];
 
 export default function Footer() {
+  // Fuera de la home, los enlaces a secciones deben apuntar a la página principal.
+  // #contacto es el propio footer, presente en todas las páginas.
+  const onHome = usePathname() === "/";
+  const sectionHref = (href: string) =>
+    onHome || href === "#contacto" ? href : `/${href}`;
+
   return (
     <footer id="contacto" className="relative overflow-hidden" style={{ borderTop: "1px solid rgba(39,179,255,0.1)" }}>
       {/* Top gradient line */}
@@ -126,7 +140,7 @@ export default function Footer() {
 
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0 w-full sm:w-auto">
             <motion.a
-              href="mailto:agenciadondigital1@gmail.com"
+              href="mailto:agenciadondigital@gmail.com"
               whileHover={{
                 scale: 1.03,
                 boxShadow: "0 0 32px 5px rgba(10,92,255,0.45)",
@@ -153,7 +167,7 @@ export default function Footer() {
               </svg>
             </motion.a>
             <a
-              href="mailto:agenciadondigital1@gmail.com"
+              href="mailto:agenciadondigital@gmail.com"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-medium text-sm transition-all duration-200 w-full sm:w-auto"
               style={{
                 background: "rgba(39,179,255,0.06)",
@@ -161,7 +175,7 @@ export default function Footer() {
                 color: "#6b89a8",
               }}
             >
-              agenciadondigital1@gmail.com
+              agenciadondigital@gmail.com
             </a>
           </div>
         </motion.div>
@@ -177,7 +191,7 @@ export default function Footer() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="lg:col-span-1"
           >
-            <a href="#" className="group inline-flex items-center gap-3 mb-5">
+            <a href={onHome ? "#" : "/"} className="group inline-flex items-center gap-3 mb-5">
               <div className="relative">
                 <svg width="38" height="38" viewBox="0 0 40 40" fill="none" aria-hidden>
                   <rect width="40" height="40" rx="9" fill="#0A5CFF" />
@@ -250,7 +264,7 @@ export default function Footer() {
               {navLinks.map((l) => (
                 <li key={l.href}>
                   <a
-                    href={l.href}
+                    href={sectionHref(l.href)}
                     className="text-sm text-[#aac0d8] hover:text-white transition-colors duration-200"
                   >
                     {l.label}
@@ -274,7 +288,7 @@ export default function Footer() {
               {services.map((l) => (
                 <li key={l.label}>
                   <a
-                    href={l.href}
+                    href={sectionHref(l.href)}
                     className="text-sm text-[#aac0d8] hover:text-white transition-colors duration-200"
                   >
                     {l.label}
@@ -317,10 +331,10 @@ export default function Footer() {
                   />
                 </svg>
                 <a
-                  href="mailto:agenciadondigital1@gmail.com"
+                  href="mailto:agenciadondigital@gmail.com"
                   className="text-sm text-[#aac0d8] hover:text-white transition-colors duration-200"
                 >
-                  agenciadondigital1@gmail.com
+                  agenciadondigital@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
@@ -377,25 +391,20 @@ export default function Footer() {
             © {new Date().getFullYear()} Don Digital. Todos los derechos
             reservados.
           </p>
-          <div className="flex items-center gap-5">
-            <a
-              href="#"
-              className="text-xs text-[#6b89a8] hover:text-[#aac0d8] transition-colors duration-200"
-            >
-              Política de privacidad
-            </a>
-            <a
-              href="#"
-              className="text-xs text-[#6b89a8] hover:text-[#aac0d8] transition-colors duration-200"
-            >
-              Aviso legal
-            </a>
-            <a
-              href="#"
-              className="text-xs text-[#6b89a8] hover:text-[#aac0d8] transition-colors duration-200"
-            >
-              Cookies
-            </a>
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+            {legalLinks.map((l, i) => (
+              <span key={l.href} className="flex items-center gap-3">
+                {i > 0 && <span aria-hidden className="text-xs text-[#6b89a8]/50">|</span>}
+                <a
+                  href={l.href}
+                  className="text-xs text-[#6b89a8] hover:text-[#aac0d8] transition-colors duration-200"
+                >
+                  {l.label}
+                </a>
+              </span>
+            ))}
+            <span aria-hidden className="text-xs text-[#6b89a8]/50">|</span>
+            <CookieSettingsButton className="text-xs text-[#6b89a8] hover:text-[#aac0d8] transition-colors duration-200 cursor-pointer" />
           </div>
         </div>
 
